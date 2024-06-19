@@ -1,18 +1,26 @@
 class Logger {
-    logAll;
+    private logAll;
+
     constructor(){
         this.logAll = true;
     }
 
-    static ERR(errMsg: string){
-        console.log(errMsg);
+    ERR(errMsg: string){
+        console.log(`There was an error with message: ${errMsg}`);
     }
 
-    static DEBUG(dbgMsg: string){
-        console.log(dbgMsg);
+    DEBUG(dbgMsg: string){
+        console.log(`Debug message: ${dbgMsg}`);
     }
 
+    WARN(warnMsg: string){
+        console.log(`Warning: ${warnMsg}`);
+    }
 
+    INFO(infoMSG: string){
+        console.log(`Info: ${infoMSG}`);
+    }
 }
 
-Logger.ERR("There was an error!");
+const logger = new Logger();
+logger.INFO('Updated!');
