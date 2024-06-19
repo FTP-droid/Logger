@@ -1,0 +1,1 @@
+Utilized this site for help on initalizing a typescript project: https://www.howtographql.com/typescript-helix/1-project-setup/
