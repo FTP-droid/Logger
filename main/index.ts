@@ -1,11 +1,27 @@
+type logLevel = 'logAll' | 'error' | 'debug' | 'warn' | 'info' | 'none';
+
 class Logger {
-    private logAll;
+    logLevel: logLevel;
 
     constructor(){
-        this.logAll = true;
+        this. logLevel = 'logAll';
     }
 
-    ERR(errMsg: string){
+    getLogLevel(){
+        console.log(`Log Level: ${this.logLevel}`);
+    }
+
+    setLogLevel(newLogLevel: logLevel){
+        if(newLogLevel !== 'logAll'  && newLogLevel !== 'error'  && newLogLevel !== 'debug'  
+            && newLogLevel !== 'warn' && newLogLevel !== 'info' && newLogLevel !== 'none'){
+            console.log(`Log level not updated. INVALID INPUT: ${newLogLevel}.\n The logger will continue logging with previous logLevel ${this.logLevel}`);
+            return;
+        }
+
+        this.logLevel = newLogLevel;
+    }
+
+    ERROR(errMsg: string){
         console.log(`There was an error with message: ${errMsg}`);
     }
 
@@ -23,4 +39,6 @@ class Logger {
 }
 
 const logger = new Logger();
+logger.setLogLevel('logAll');
+logger.getLogLevel();
 logger.INFO('Updated!');
