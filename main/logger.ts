@@ -40,7 +40,7 @@ class Logger {
         if(this.logLevel == 'none' || (this.logLevel !== 'logAll' && this.logLevel !== 'error')){
             return;
         }
-        console.log(`There was an error with message: ${errMsg}`);
+        console.log(`Error: ${errMsg}`);
     }
 
     DEBUG(dbgMsg: string){
