@@ -1,6 +1,11 @@
 import Logger from "./logger.js";
 
-let logger = new Logger();
-let logger2 = new Logger();
+let logger = new Logger('First Logger');
 Logger.getLoggerCount();
-logger.WARN("Invalid input!");
+logger.TIMER_START("Started!");
+
+setTimeout(() => {
+    logger.TIMER_END("Started!");
+}, 1000);
+
+logger.INFO("Invalid input!");
