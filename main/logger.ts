@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { nodeConsoleTextToCommands } from './constants.js';
 
 type logTypes = 'error' | 'debug' | 'warn' | 'info';
 type logLevel = logTypes | 'logAll' | 'none';
@@ -18,11 +19,12 @@ class Logger {
     static getLoggerCount(){
         console.log(Logger.count);
     }
-
+    
     getLogLevel(){
         console.log(`Log Level: ${this.logLevel}`);
     }
-
+    
+    //Sets which types of logs should be output. If an invalid input is used with this function, it exits early while preserving the previous value of logLevel.
     setLogLevel(newLogLevel: logLevel){
         if(newLogLevel !== 'logAll'  && newLogLevel !== 'error'  && newLogLevel !== 'debug'  
             && newLogLevel !== 'warn' && newLogLevel !== 'info' && newLogLevel !== 'none'){
@@ -37,7 +39,7 @@ class Logger {
         if(this.logLevel == 'none' || (this.logLevel !== 'logAll' && this.logLevel !== 'error')){
             return;
         }
-        console.log(`Error: ${errMsg}`);
+        console.log(`${nodeConsoleTextToCommands.FgRed}Error:${nodeConsoleTextToCommands.Reset} ${errMsg}`);
     }
 
     DEBUG(dbgMsg: string){
@@ -51,7 +53,7 @@ class Logger {
         if(this.logLevel == 'none' || (this.logLevel !== 'logAll' && this.logLevel !== 'error')){
             return;
         }
-        console.log(`Warning: ${warnMsg}`);
+        console.log(`${nodeConsoleTextToCommands.FgYellow}Warning:${nodeConsoleTextToCommands.Reset} ${warnMsg}`);
     }
 
     INFO(infoMSG: string){
