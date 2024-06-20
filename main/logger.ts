@@ -1,17 +1,22 @@
 import path from 'node:path';
 
-type logLevel = 'logAll' | 'error' | 'debug' | 'warn' | 'info' | 'none';
+type logTypes = 'error' | 'debug' | 'warn' | 'info';
+type logLevel = logTypes | 'logAll' | 'none';
 
 import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 
 class Logger {
-    logLevel: logLevel;
-    verbose: boolean;
+    private logLevel: logLevel;
+    private static count: number = 0;
 
     constructor(){
         this.logLevel = 'logAll';
-        this.verbose = false;
+        Logger.count++;
+    }
+
+    static getLoggerCount(){
+        console.log(Logger.count);
     }
 
     getLogLevel(){
@@ -28,14 +33,6 @@ class Logger {
         this.logLevel = newLogLevel;
     }
 
-    getVerbose(){
-        console.log(this.verbose);
-    }
-
-    setVerbose(newVerbose: boolean){
-        this.verbose = newVerbose;
-    }
-
     ERROR(errMsg: string){
         if(this.logLevel == 'none' || (this.logLevel !== 'logAll' && this.logLevel !== 'error')){
             return;
@@ -47,7 +44,7 @@ class Logger {
         if(this.logLevel == 'none' || (this.logLevel !== 'logAll' && this.logLevel !== 'debug')){
             return;
         }
-        console.log(`Debug message: ${dbgMsg}`);
+        console.log(`Debug: ${dbgMsg}`);
     }
 
     WARN(warnMsg: string){
