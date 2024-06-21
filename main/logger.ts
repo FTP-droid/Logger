@@ -12,16 +12,21 @@ class Logger {
     private logLevel: logLevel;
     private globalOutputDateAndTime = false;
     private timers: Map<string, number> = new Map();
+    private saveLogs: boolean;
+    private logs: string[] = [];
 
     private static loggers: Map<string, Logger> = new Map();
 
-    constructor(loggerName: string){
+    constructor(loggerName: string, globalOutputDateAndTime = true, saveLogs = true, ){
+        //Throw an error instead of warning to prevent the use of 2 loggers with identical names.
         if(Logger.loggers.has(loggerName)){
             throw new Error(`A logger with the name: '${loggerName}' already exists.`);
         }
         Logger.loggers.set(loggerName, this);
 
         this.loggerName = loggerName;
+        this.globalOutputDateAndTime = !!globalOutputDateAndTime;
+        this.saveLogs = saveLogs;
         this.logLevel = 'logAll';
     }
 
@@ -30,7 +35,7 @@ class Logger {
     }
 
     getLoggerName(){
-        console.log(`The name of this logger is: ${this.loggerName}`)
+        console.log(`The name of this logger is: ${this.loggerName}`);
     }
     
     getLogLevel(){
@@ -42,7 +47,7 @@ class Logger {
     setLogLevel(newLogLevel: logLevel){
         if(newLogLevel !== 'logAll'  && newLogLevel !== 'error'  && newLogLevel !== 'debug'  
             && newLogLevel !== 'warn' && newLogLevel !== 'info' && newLogLevel !== 'none'){
-            console.log(`Log level not updated. INVALID INPUT: ${newLogLevel}.\n The logger will continue logging with previous log level: ${this.logLevel}`);
+            console.log(`Log level not updated. INVALID INPUT: '${newLogLevel}'.\n The logger will continue logging with previous log level: '${this.logLevel}'`);
             return;
         }
 
@@ -60,6 +65,14 @@ class Logger {
         this.globalOutputDateAndTime = newGlobalOutputDateAndTime;
     }
 
+    getLogs(){
+        if(!this.saveLogs){
+            this.WARN(`Function 'getLogs' was called however the 'saveLogs' variable was set to false during the initialization of this logger. No logs are currently saved.`);
+        }
+        
+        return this.logs;
+    }
+
     //Log an error message. Instead of logging, you may opt to manually throw an error by setting the optional throwErr paramater to true.
     ERROR(errMsg: string, throwErr = false, outputDateAndTime = false){
         if(this.logLevel == 'none' || (this.logLevel !== 'logAll' && this.logLevel !== 'error')){
@@ -70,9 +83,15 @@ class Logger {
             throw new Error(errMsg);
         }
         
-        //If globalOutputDateAndTime (object variable) or outputDataAndTime (function variable) is true, add the date and time to the final output.
-        let msg = this.globalOutputDateAndTime || outputDateAndTime? `[${new Date().toString()}] ` : "";
+        //If globalOutputDateAndTime (object variable) or outputDateAndTime (function variable) is true, add the date and time to the final output.
+        let msg = this.globalOutputDateAndTime || outputDateAndTime? `[${new Date().toLocaleString()}] ` : "";
+        
+        const msgForLogging = `${msg}Error: ${errMsg}`;
         msg += `${nodeConsoleTextToCommands.FgBlue}Error:${nodeConsoleTextToCommands.Reset} ${errMsg}`;
+
+        if(this.saveLogs){
+            this.logs.push(msgForLogging);
+        }
 
         console.log(msg);
     }
@@ -83,9 +102,15 @@ class Logger {
             return;
         }
 
-        //If globalOutputDateAndTime (object variable) or outputDataAndTime (function variable) is true, add the date and time to the final output.
-        let msg = this.globalOutputDateAndTime || outputDateAndTime? `[${new Date().toString()}] ` : "";
+        //If globalOutputDateAndTime (object variable) or outputDateAndTime (function variable) is true, add the date and time to the final output.
+        let msg = this.globalOutputDateAndTime || outputDateAndTime? `[${new Date().toLocaleString()}] ` : "";
+
+        const msgForLogging = `${msg}Debug: ${dbgMsg}`;
         msg += `${nodeConsoleTextToCommands.FgBlue}Debug:${nodeConsoleTextToCommands.Reset} ${dbgMsg}`;
+
+        if(this.saveLogs){
+            this.logs.push(msgForLogging);
+        }
 
         console.log(msg);
     }
@@ -96,9 +121,15 @@ class Logger {
             return;
         }
 
-        //If globalOutputDateAndTime (object variable) or outputDataAndTime (function variable) is true, add the date and time to the final output.
-        let msg = this.globalOutputDateAndTime || outputDateAndTime? `[${new Date().toString()}] ` : "";
+        //If globalOutputDateAndTime (object variable) or outputDateAndTime (function variable) is true, add the date and time to the final output.
+        let msg = this.globalOutputDateAndTime || outputDateAndTime? `[${new Date().toLocaleString()}] ` : "";
+
+        const msgForLogging = `${msg}Warning: ${warnMsg}`;
         msg += `${nodeConsoleTextToCommands.FgYellow}Warning:${nodeConsoleTextToCommands.Reset} ${warnMsg}`;
+
+        if(this.saveLogs){
+            this.logs.push(msgForLogging);
+        }
 
         console.log(msg);
     }
@@ -109,27 +140,42 @@ class Logger {
             return;
         }
 
-        //If globalOutputDateAndTime (object variable) or outputDataAndTime (function variable) is true, add the date and time to the final output.
-        let msg = this.globalOutputDateAndTime || outputDateAndTime? `[${new Date().toString()}] ` : "";
+        //If globalOutputDateAndTime (object variable) or outputDateAndTime (function variable) is true, add the date and time to the final output.
+        let msg = this.globalOutputDateAndTime || outputDateAndTime? `[${new Date().toLocaleString()}] ` : "";
+
+        const msgForLogging = `${msg}Info: ${infoMSG}`;
         msg += `${nodeConsoleTextToCommands.FgBlue}Info:${nodeConsoleTextToCommands.Reset} ${infoMSG}`;
+
+        if(this.saveLogs){
+            this.logs.push(msgForLogging);
+        }
 
         console.log(msg);
     }
 
-    //Create a new named timer if a timer with name:'timerName' does not exist.
-    TIMER_START(timerName: string){
+    //Create a new named timer if a timer with the same name does not already exist.
+    TIMER_START(timerName: string, outputDateAndTime=false){
         if(this.timers.has(timerName)){
-            this.WARN(`A timer '${timerName}' already exists in '${this.loggerName}'. A new timer was not created.`);
+            this.WARN(`A timer ${timerName} already exists in ${this.loggerName}. A new timer was not created.`);
             return;
         }
         
-        console.log(`${nodeConsoleTextToCommands.FgGreen}'${timerName}' started.${nodeConsoleTextToCommands.Reset}`);
+        let msg = this.globalOutputDateAndTime || outputDateAndTime? `[${new Date().toLocaleString()}] ` : "";
+        const msgForLogging = msg + `${timerName} started.`;
+        
+        msg += `${nodeConsoleTextToCommands.FgGreen}${timerName} started.${nodeConsoleTextToCommands.Reset}`;
+        
+        console.log(msg);
+        if(this.saveLogs){
+            this.logs.push(msgForLogging);
+        }
+
         this.timers.set(timerName, Date.now());
     }
 
 
     //Stop a timer (if it exists) by default and log the elapsed time. Or log the current elapsed time without stopping a timer (if it exists).
-    TIMER_STOP(timerName: string, log = false){
+    TIMER_STOP(timerName: string, log = false, outputDateAndTime = false){
         if(!this.timers.has(timerName)){
             this.WARN(`TIMER_STOP was called but a timer '${timerName}' was not found in '${this.loggerName}'.`);
             return;
@@ -139,10 +185,18 @@ class Logger {
         const timerEnd = Date.now();
         const elapsedTime = timerEnd - timerStart;
 
-        const timerMsg = log? `'${timerName}' current elapsed time: ${elapsedTime}ms.`: `'${timerName}' stopped with elapsed time: ${elapsedTime}ms.`;
-
-        const msg = `${nodeConsoleTextToCommands.FgGreen}${timerMsg}${nodeConsoleTextToCommands.Reset}`
+        let dateMsg = this.globalOutputDateAndTime || outputDateAndTime? `[${new Date().toLocaleString()}] ` : "";
+        let timerMsg = log? `${timerName} current elapsed time: ${elapsedTime}ms.`: 
+            `${timerName} stopped with elapsed time: ${elapsedTime}ms.`;
+        
+        const msgForLogging = `${dateMsg}${timerMsg}`;
+        const msg = `${dateMsg}${nodeConsoleTextToCommands.FgGreen}${timerMsg}${nodeConsoleTextToCommands.Reset}`
+        
         console.log(msg);
+
+        if(this.saveLogs){
+            this.logs.push(msgForLogging);
+        }
 
         if(log)
             return;

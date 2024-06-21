@@ -1,2 +1,2 @@
 Utilized this site for help on initalizing a typescript project: https://www.howtographql.com/typescript-helix/1-project-setup/
-Utilized this thread for determining how to change the color of text in a node.js console application: https://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color. The colors are implemented using the accepted answer in this thread.
+Utilized this thread for determining how to change the color of text in a node.js console application: https://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color. The colors for this application are implemented using the accepted answer in this thread.
