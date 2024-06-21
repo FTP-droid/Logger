@@ -14,20 +14,20 @@ class Logger {
     private timerStarted = false;
     private timerStartValue = 0;
 
-    private static loggers: Logger[] = [];
+    private static loggers: Map<string, Logger> = new Map();
 
     constructor(loggerName: string){
-        if(Logger.loggers.find((elem) => elem.loggerName == loggerName)){
-            throw new Error(`A logger with the name: '${loggerName}' already exists`);
+        if(Logger.loggers.has(loggerName)){
+            throw new Error(`A logger with the name: '${loggerName}' already exists.`);
         }
-        Logger.loggers.push(this);
+        Logger.loggers.set(loggerName, this);
 
         this.loggerName = loggerName;
         this.logLevel = 'logAll';
     }
 
     static getLoggerCount(){
-        console.log(Logger.loggers.length);
+        console.log(Logger.loggers.size);
     }
 
     //Get the logger name
@@ -113,24 +113,25 @@ class Logger {
         console.log(msg);
     }
 
-    TIMER_START(timerStartMsg: string){
+    TIMER_START(timerName: string){
         if(this.timerStarted){
-            this.WARN(`A timer was already started using this logger. A logger can only have one timer running at a time, create a new logger if you would like to
-                have multiple timers running across overlapping intervals.`);
+            this.WARN(`A timer was already started using this logger. ` +  
+                `A logger can only have one timer running at a time. \nCreate a new logger if you would like to have multiple timers running across overlapping intervals.`);
             return;
         }
-
+        
         this.timerStarted = true;
+        console.log(`${nodeConsoleTextToCommands.FgGreen}Start of ${timerName}.${nodeConsoleTextToCommands.Reset}`);
         this.timerStartValue = Date.now();
     }
 
-    TIMER_END(timerEndMsg: string){
+    TIMER_END(timerName: string){
         if(!this.timerStarted){
-            this.WARN(`TIMER_END was called but no running instance of the timer was found, the function will exit early.`);
+            this.WARN(`TIMER_END was called but no running instance of timer was found.`);
             return;
         }
 
-        console.log(`${Date.now() - this.timerStartValue}`);
+        console.log(`${nodeConsoleTextToCommands.FgGreen}End of ${timerName}. \nElapsed Time: ${Date.now() - this.timerStartValue}ms.${nodeConsoleTextToCommands.Reset}`);
         this.timerStarted = false;
     }
 }
