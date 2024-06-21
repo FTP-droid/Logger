@@ -17,8 +17,8 @@ async function timer(){
     await new Promise<void> (resolve => {
         setTimeout(() => {
             logger.TIMER_STOP("timer 2");
+            resolve();
         }, 1000);
-        resolve();
     });
 
     console.log("LOGS");
