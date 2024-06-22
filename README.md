@@ -176,7 +176,7 @@ choices based on my own preferences to keep it simple for the user. Though there
 I additionally chose to include an 'addLog' method that a developer can override in the future (with a few code tweaks)
 to add a log in a location other than the logger object from which it was called from.
 
-Given the time constraint and the non-requirement of a testing suite. I did not include a library for testing each method in my Logger class extensively. I typically always include some form
+Given the time constraint and the non-requirement of a testing suite. I did not include a library for testing each method in my Logger class. I typically always include some form
 of testing for any application I build to ensure consistency of application I am building.
 
 I used guard clauses often in the methods of the Logger class to ensure a method returns early if certain conditions are not met. 
