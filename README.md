@@ -2,6 +2,16 @@
 
 Logger is a lightweight easy to set up package that enables you, the developer, to log your code quickly and efficiently with as little hassle as possible.
 
+## Using the logger in the included index.ts file
+```javascript
+//To start the project in dev mode
+npm run dev
+
+//To start the project in production mode
+npm run start
+
+```
+
 ## Methods
 
 ### Create a logger with a logger name
