@@ -63,7 +63,7 @@ logger.DEBUG("This sentence should not be output.");
 logger.INFO("The application is working as expected.");
 ```
 
-### Local and global outputDateAndTime
+### Local and object outputDateAndTime
 By default, the object variable outputDateAndTime for a logger is set to true. This means a logger will always include the date a time a log was made.
 
 Suppose you do not want to include the date and time for a particular log, when you set all logs of a logger to show the date and time a log occured or vice versa.
