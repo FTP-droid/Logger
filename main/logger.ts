@@ -27,15 +27,15 @@ class Logger {
     }
 
     static getLoggers(){
-        return this.loggers;
+        return Logger.loggers;
     }
 
     getLoggerName(){
-        console.log(`The name of this logger is: ${this.loggerName}`);
+        return this.loggerName;
     }
     
     getLogLevel(){
-        console.log(`Log Level: ${this.logLevel}`);
+        return this.logLevel;
     }
 
     //Sets which types of logs are output. 
@@ -152,7 +152,7 @@ class Logger {
         }
         
         if(this.timers.has(timerName)){
-            this.WARN(`A timer '${timerName}' already exists in '${this.loggerName}'. A new timer was not created.`);
+            console.log(`A timer '${timerName}' already exists in '${this.loggerName}'. A new timer was not created.`);
             return;
         }
         
@@ -177,7 +177,7 @@ class Logger {
         }
         
         if(!this.timers.has(timerName)){
-            this.WARN(`TIMER_STOP was called but a timer '${timerName}' was not found in '${this.loggerName}'.`);
+            console.log(`TIMER_STOP was called but a timer '${timerName}' was not found in '${this.loggerName}'.`);
             return;
         }
 
