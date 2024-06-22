@@ -111,7 +111,7 @@ console.log(logger2.getLogs());
 *Note that the logs are saved to the logger's logs array by calling the addLog method on a log (assuming the saveLogs variable is set to true). 
 There are plans to allow you the developer to overwrite this method in the future if you would like to save the logs somewhere else.*
 
-### Get or set the logLevel of your logger
+### Get or set the log level of your logger
 Loggers, by default, outputs every log available. You can choose to output only one type of log by changing the logLevel.
 Do note that if you choose to not output certain logs, and you have the saveLogs option enabled, the logs that you do not output are also not saved in
 the logger's logs array.
