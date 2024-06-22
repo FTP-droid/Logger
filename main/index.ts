@@ -1,11 +1,14 @@
 import Logger from "./logger.js";
 
-let logger = new Logger('First Logger', true);
-Logger.getLoggerCount();
+let logger = new Logger('First Logger');
+logger.setLogLevel('info');
 logger.TIMER_START("timer 1");
 logger.TIMER_START("timer 1");
 logger.TIMER_START("timer 2");
-logger.INFO("Program working as expected.", false);
+logger.DEBUG("Weird bug happens here.", false);
+logger.WARN("This is a warning");
+logger.ERROR("ERROR!");
+logger.INFO("HELLO");
 
 async function timer(){
     await new Promise<void> (resolve => {setTimeout(() => {
