@@ -7,7 +7,7 @@ Logger is a lightweight easy to set up package that enables you, the developer, 
 //To start the project in dev mode
 npm run dev
 
-//To start the project in production mode
+//To start the project in production mode. This script will generate js files for each of the ts files in this application to be used for production.
 npm run start
 
 ```
