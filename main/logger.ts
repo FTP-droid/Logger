@@ -38,16 +38,6 @@ class Logger {
         console.log(`Log Level: ${this.logLevel}`);
     }
 
-    //Adds a log to the logs array in this logger class.
-    addLog(msg: string){
-        this.logs.push(msg);
-    }
-
-    //Return an array of the saved logs. Note that if saveLogs was set to false in the constructor, am empty array is returned.
-    getLogs(){   
-        return this.logs;
-    }
-    
     //Sets which types of logs are output. 
     //If an invalid input is used with this function, it exits early while preserving the previous value of logLevel.
     setLogLevel(newLogLevel: logLevel){
@@ -58,6 +48,16 @@ class Logger {
         }
 
         this.logLevel = newLogLevel;
+    }
+
+    //Adds a log to the logs array in this logger class.
+    addLog(msg: string){
+        this.logs.push(msg);
+    }
+
+    //Return an array of the saved logs. Note that if saveLogs was set to false in the constructor, am empty array is returned.
+    getLogs(){   
+        return this.logs;
     }
 
     getGlobalOutputDateAndTime(){
