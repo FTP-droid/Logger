@@ -22,7 +22,7 @@ import Logger from 'logger.js';
 const logger = new Logger('First Logger');
 
 //Console log the logger's name
-logger.getLoggerName();
+console.log(logger.getLoggerName());
 
 //If you prefer not having the date and time recorded on each log, set the second parameter to false.
 //This option can be changed on a log to log basis if desired (explained further down in the documentation).
@@ -40,7 +40,7 @@ If you would like to easily access any of the loggers you have created. You can 
 const logger1 = new Logger('logger 1');
 const logger2 = new Logger('logger 2');
 
-//Console logs a returned map with keys equaling a logger's name and values equaling the 'this' instance of a logger.
+//Console log a returned map with keys equaling a logger's name and values equaling the 'this' instance of a logger.
 console.log(Logger.getLoggers());
 ```
 
@@ -84,8 +84,9 @@ If you would like to get or set the global outputDateAndTime of a logger, you ca
 ```javascript
 const logger = new Logger('Logger');
 
-//Console logs whether the date and time will be added to each log by default. The default is true.
-logger.getGlobalOutputDateAndTime();
+//Returns the logger variable globalOutputDateAndTime, this variable indicates whether the date and time will be added to each log by default. 
+//The default is true.
+console.log(logger.getGlobalOutputDateAndTime());
 
 //Sets the globalDateAndTime variable to false for this logger.
 logger.setGlobalOutputDateAndTime(false);
@@ -101,7 +102,7 @@ logger.INFO("This is the first log of this logger.");
 //Console log the array of logs of this logger. The array in this logger will contain one log.
 console.log(logger.getLogs());
 
-//Note that the third paramater is set to false. Consequently logs will not be saved to the logger.
+//Note that the third paramater is set to false. Consequently, logs will not be saved to the logger.
 const logger2 = new Logger('This logger will not save its logs', true, false);
 
 logger2.INFO("This is the first log of this logger.");
@@ -120,8 +121,8 @@ the logger's logs array.
 ```javascript
 const logger = new Logger('Logging logger');
 
-//Console logs the logLevel variable. Outputs 'logAll' (along with some text) which is the default option.
-logger.getlogLevel();
+//Console logs the logLevel variable. Outputs 'logAll' which is the default option.
+console.log(logger.getlogLevel());
 
 //Only log timers
 logger.setLogLevel('timers');
@@ -129,7 +130,7 @@ logger.setLogLevel('timers');
 
 ### Create a timer for measuring the time of running a block of code
 If you want to consistenly measure how long it takes to run a block of code, the TIMER methods are sutible for your use case.
-Simple use the TIMER_START method to start the timer (and provide a timer name for your timer). Then use the TIMER_STOP method
+Simply use the TIMER_START method to start the timer, make sure you provide a name for your timer. Then use the TIMER_STOP method
 to log the current elapsed time of your timer, and stop the timer or continue the timer with the log parameter in the TIMER_STOP method.
 
 ```javascript
@@ -141,7 +142,7 @@ logger.TIMER_START('timer 2');
 
 async function timer(){
     await new Promise<void> (resolve => {setTimeout(() => {
-        //Stops the timer after 1000ms.
+        //Stops the first timer after 1000ms.
         //The elapsed time is output, it may not be 100% accurate but it is a great estimate.
         logger.TIMER_STOP("timer 1");
 
@@ -163,16 +164,15 @@ timer();
 
 ```
 
-*Note that you may encounter unexpected results if you try to start or stop a timer when the logLevel is currently set to to a level that does not include timers, since this logLevel
-enables the TIMER functions to exit early and not set/unset any timer. 
-Therefore, it is not recommended to change the log level from a logLevel that allows timers to a logLevel that doesn't allow timers or vice versa, in between the usage of a timer.*
+*Note that you may encounter unexpected results if you try to change the log level from a logLevel that allows timers to a logLevel that doesn't allow timers or vice versa
+in between the TIMER_START and TIMER_STOP functions of a timer. Therefore it is not recommended to change the log level in between the use of a timer.*
 
 ## Sources
-For help on initalizing a typescript project: https://www.howtographql.com/typescript-helix/1-project-setup/
+For initalizing a typescript project: https://www.howtographql.com/typescript-helix/1-project-setup/
 
 For determining how to change the color of text in a node.js console application: 
 https://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color.
-The colors for this application are implemented using the accepted answer in the previous thread.
+The colors for this application are implemented using the accepted answer in the above thread.
 
 ## Design Choices
 
@@ -185,10 +185,9 @@ In general, there were a lot of cases where I could have enhanced the customizab
 choices based on my own preferences to keep it simple for the user. Though there are some methods in this application that enable custom options.
 
 I additionally chose to include an 'addLog' method that a developer can override in the future (with a few code tweaks)
-to add a log in a location other than the logger object from which it was called from.
+to save a log in a location other than the logger object from which it was called from.
 
-Given the time constraint and the non-requirement of a testing suite. I did not include a library for testing each method in my Logger class. I typically always include some form
-of testing for any application I build to ensure consistency of application I am building.
+Given the time constraint and the non-requirement of a testing suite. I did not include a library for testing each method in my Logger class. I typically always include some form of testing for any application I build to ensure consistency of application I am building.
 
 I used guard clauses often in the methods of the Logger class to ensure a method returns early if certain conditions are not met. 
 These guard clauses enhanced the readability of my application in my opinion, though some may disagree.
