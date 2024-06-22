@@ -1,9 +1,15 @@
 import Logger from "./logger.js";
 
 let logger = new Logger('First Logger');
-logger.setLogLevel('info');
+let logger2 = new Logger('Second Logger');
+
+console.log(Logger.getLoggers());
+logger.setLogLevel('timers');
 logger.TIMER_START("timer 1");
+
+//A timer named timer 1 already exists, so this line of code will not start a new timer.
 logger.TIMER_START("timer 1");
+
 logger.TIMER_START("timer 2");
 logger.DEBUG("Weird bug happens here.", false);
 logger.WARN("This is a warning");
