@@ -78,7 +78,7 @@ const logger = new Logger('Logger logs no date and time');
 logger.WARN("This warning must show the date and time it occured", false);
 ```
 
-If you would like to get or set the globalOutputDateAndTime variable of a logger, you can use the getter and setter methods for the globalOutputDateAndTime variable.
+If you would like to get or set the globalOutputDateAndTime variable of a logger, you can use the getter or setter methods for the globalOutputDateAndTime variable.
 
 ```javascript
 const logger = new Logger('Logger');
