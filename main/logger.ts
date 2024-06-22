@@ -61,7 +61,7 @@ class Logger {
     }
 
     getGlobalOutputDateAndTime(){
-        console.log(this.globalOutputDateAndTime);
+        return this.globalOutputDateAndTime;
     }
     
     setGlobalOutputDateAndTime(newGlobalOutputDateAndTime: boolean){
