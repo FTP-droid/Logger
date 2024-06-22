@@ -28,8 +28,7 @@ console.log(logger.getLoggerName());
 //This option can be changed on a log to log basis if desired (explained further down in the documentation).
 const logger2 = new Logger('Second Logger', false);
 
-//If you prefer not having your logs saved in the logger object for retrieval later.
-//Note that the third paramater will set whether you want your logs to be saved.
+//If you prefer not having your logs saved in the logger object for retrieval later, set the third parameter to false.
 //There is more information on this option further down in the documentation.
 const logger3 = new Logger('Third Logger', true, false);
 ```
@@ -65,30 +64,30 @@ logger.INFO("The application is working as expected.");
 ```
 
 ### Local and global outputDateAndTime
-By default, the global variable outputDateAndTime for a logger is set to true. This means a logger will always include the date a time a log was made.
+By default, the object variable outputDateAndTime for a logger is set to true. This means a logger will always include the date a time a log was made.
 
-Suppose you do not want to include the date and time for a particular log, when you globally set all logs to show the date and time a log occured or vice versa.
-In this case, you can simply override the globally set date and time variable locally with the last parameter in the UPPERCASE method you are logging with. As an example:
+Suppose you do not want to include the date and time for a particular log, when you set all logs of a logger to show the date and time a log occured or vice versa.
+In this case, you can simply override the set date and time variable locally with the last parameter in the UPPERCASE method you are logging with. As an example:
 
 ```javascript
 //Creates a logger that outputs the date and time for each log by default.
 const logger = new Logger('Logger logs no date and time');
 
 //This log will not include the date and time with the message content since it utilized the local outputDateAndTime parameter to override
-// the default (or globally) set outputDateAndTime variable.
+//the default set globalOutputDateAndTime variable.
 logger.WARN("This warning must show the date and time it occured", false);
 ```
 
-If you would like to get or set the global outputDateAndTime of a logger, you can use the getter and setter methods for the globalOutputDateAndTime variable.
+If you would like to get or set the globalOutputDateAndTime variable of a logger, you can use the getter and setter methods for the globalOutputDateAndTime variable.
 
 ```javascript
 const logger = new Logger('Logger');
 
-//Returns the logger variable globalOutputDateAndTime, this variable indicates whether the date and time will be added to each log by default. 
+//Console log the logger variable globalOutputDateAndTime, this variable indicates whether the date and time will be added to each log by default. 
 //The default is true.
 console.log(logger.getGlobalOutputDateAndTime());
 
-//Sets the globalDateAndTime variable to false for this logger.
+//Sets the globalOutputDateAndTime variable to false for this logger.
 logger.setGlobalOutputDateAndTime(false);
 ```
 
@@ -104,7 +103,6 @@ console.log(logger.getLogs());
 
 //Note that the third paramater is set to false. Consequently, logs will not be saved to the logger.
 const logger2 = new Logger('This logger will not save its logs', true, false);
-
 logger2.INFO("This is the first log of this logger.");
 
 //Returns an empty array as logs are not saved in this logger.
@@ -114,7 +112,7 @@ console.log(logger2.getLogs());
 There are plans to allow you the developer to overwrite this method in the future if you would like to save the logs somewhere else.*
 
 ### Get or set the logLevel of your logger
-Loggers by default outputs every log available. You can choose to output only one type of log by changing the logLevel.
+Loggers, by default, outputs every log available. You can choose to output only one type of log by changing the logLevel.
 Do note that if you choose to not output certain logs, and you have the saveLogs option enabled, the logs that you do not output are also not saved in
 the logger's logs array.
 
@@ -130,8 +128,8 @@ logger.setLogLevel('timers');
 
 ### Create a timer for measuring the time of running a block of code
 If you want to consistenly measure how long it takes to run a block of code, the TIMER methods are sutible for your use case.
-Simply use the TIMER_START method to start the timer, make sure you provide a name for your timer. Then use the TIMER_STOP method
-to log the current elapsed time of your timer, and stop the timer or continue the timer with the log parameter in the TIMER_STOP method.
+Simply use the TIMER_START method to start a named timer. Then use the TIMER_STOP method
+to log the current elapsed time of your timer, and stop the timer or continue the timer by setting the log parameter to true in the TIMER_STOP method.
 
 ```javascript
 const logger = new Logger('Logger for timers');
@@ -142,7 +140,7 @@ logger.TIMER_START('timer 2');
 
 async function timer(){
     await new Promise<void> (resolve => {setTimeout(() => {
-        //Stops the first timer after 1000ms.
+        //Stop the first timer after 1000ms.
         //The elapsed time is output, it may not be 100% accurate but it is a great estimate.
         logger.TIMER_STOP("timer 1");
 
@@ -164,7 +162,7 @@ timer();
 
 ```
 
-*Note that you may encounter unexpected results if you try to change the log level from a logLevel that allows timers to a logLevel that doesn't allow timers or vice versa
+*Note that you may encounter unexpected results if you try to change the log level from a logLevel that allows timers to a logLevel that does not allow timers or vice versa
 in between the TIMER_START and TIMER_STOP functions of a timer. Therefore it is not recommended to change the log level in between the use of a timer.*
 
 ## Sources
@@ -184,10 +182,10 @@ as they cover a wide array of use cases. The timer methods in the Logger class w
 In general, there were a lot of cases where I could have enhanced the customizability of the application for the user. Instead, I opted to make a lot of the design
 choices based on my own preferences to keep it simple for the user. Though there are some methods in this application that enable custom options.
 
-I additionally chose to include an 'addLog' method that a developer can override in the future (with a few code tweaks)
+I additionally chose to include an 'addLog' method that a developer can be overridden in the future (with a few code tweaks)
 to save a log in a location other than the logger object from which it was called from.
 
-Given the time constraint and the non-requirement of a testing suite. I did not include a library for testing each method in my Logger class. I typically always include some form of testing for any application I build to ensure consistency of application I am building.
+Given the time constraint and the non-requirement of a testing suite. I did not include a library for testing each method in the Logger class. I typically always include some form of testing for any application I build to ensure consistency of the application I am building.
 
 I used guard clauses often in the methods of the Logger class to ensure a method returns early if certain conditions are not met. 
 These guard clauses enhanced the readability of my application in my opinion, though some may disagree.
