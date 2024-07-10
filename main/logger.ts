@@ -69,26 +69,58 @@ class Logger {
         this.globalOutputDateAndTime = newGlobalOutputDateAndTime;
     }
 
+    private createMessage(msg: string, outputDateAndTime = this.globalOutputDateAndTime, logType: logTypes){
+        
+        let dateMsg = outputDateAndTime? `[${new Date().toLocaleString()}] ` : "";
+        
+        let colour = '';
+        let typeOfLog = '';
+
+        switch(logType){
+            case 'error':
+                colour = nodeConsoleTextToCommands.FgRed;
+                typeOfLog = 'Error:';
+                break;
+            case 'debug':
+                colour = nodeConsoleTextToCommands.FgBlue;
+                typeOfLog = 'Debug:';
+                break;
+            case 'warn':
+                colour = nodeConsoleTextToCommands.FgYellow;
+                typeOfLog = 'Warning:';
+                break;
+            case 'info':
+                colour = nodeConsoleTextToCommands.FgMagenta;
+                typeOfLog = 'Info:';
+                break;
+        }
+
+        if(colour.length === 0){
+            return 'Invalid log type selected for the private function createMessage. Hint: You cannot create a timer message with this function';
+        }
+
+        const msgForLogging = `${dateMsg}${typeOfLog} ${msg}`;
+        const msgForOutput = `${dateMsg}${colour}${typeOfLog}${nodeConsoleTextToCommands.Reset} ${msg}`;
+
+        if(this.saveLogs){
+            this.addLog(msgForLogging);
+        }
+
+        return msgForOutput;
+    }
+
     //Log an error message. Instead of logging, you may opt to manually throw an error by setting the optional throwErr paramater to true.
     ERROR(errMsg: string, throwErr = false, outputDateAndTime = this.globalOutputDateAndTime){
         if(this.logLevel == 'none' || (this.logLevel !== 'logAll' && this.logLevel !== 'error')){
             return;
-        }
-        
-        let msg = outputDateAndTime? `[${new Date().toLocaleString()}] ` : "";
-        
-        const msgForLogging = `${msg}Error: ${errMsg}`;
-        msg += `${nodeConsoleTextToCommands.FgRed}Error:${nodeConsoleTextToCommands.Reset} ${errMsg}`;
-
-        if(this.saveLogs){
-            this.addLog(msgForLogging);
         }
 
         if(throwErr){
             throw new Error(errMsg);
         }
 
-        console.log(msg);
+        let msgForOutput = this.createMessage(errMsg, outputDateAndTime, 'error');
+        console.log(msgForOutput);
     }
 
     //Log a standard debug message.
@@ -97,16 +129,9 @@ class Logger {
             return;
         }
 
-        let msg = outputDateAndTime? `[${new Date().toLocaleString()}] ` : "";
+        let msgForOutput = this.createMessage(dbgMsg, outputDateAndTime, 'debug');
 
-        const msgForLogging = `${msg}Debug: ${dbgMsg}`;
-        msg += `${nodeConsoleTextToCommands.FgBlue}Debug:${nodeConsoleTextToCommands.Reset} ${dbgMsg}`;
-
-        if(this.saveLogs){
-            this.addLog(msgForLogging);
-        }
-
-        console.log(msg);
+        console.log(msgForOutput);
     }
 
     //Log a standard warning message.
@@ -115,34 +140,20 @@ class Logger {
             return;
         }
 
-        let msg = outputDateAndTime? `[${new Date().toLocaleString()}] ` : "";
+        let msgForOutput = this.createMessage(warnMsg, outputDateAndTime, 'warn');
 
-        const msgForLogging = `${msg}Warning: ${warnMsg}`;
-        msg += `${nodeConsoleTextToCommands.FgYellow}Warning:${nodeConsoleTextToCommands.Reset} ${warnMsg}`;
-
-        if(this.saveLogs){
-            this.addLog(msgForLogging);
-        }
-
-        console.log(msg);
+        console.log(msgForOutput);
     }
 
     //Log a standard info message.
-    INFO(infoMSG: string, outputDateAndTime=this.globalOutputDateAndTime){
+    INFO(infoMsg: string, outputDateAndTime=this.globalOutputDateAndTime){
         if(this.logLevel == 'none' || (this.logLevel !== 'logAll' && this.logLevel !== 'info')){
             return;
         }
 
-        let msg = outputDateAndTime? `[${new Date().toLocaleString()}] ` : "";
+        let msgForOutput = this.createMessage(infoMsg, outputDateAndTime, 'info');
 
-        const msgForLogging = `${msg}Info: ${infoMSG}`;
-        msg += `${nodeConsoleTextToCommands.FgMagenta}Info:${nodeConsoleTextToCommands.Reset} ${infoMSG}`;
-
-        if(this.saveLogs){
-            this.addLog(msgForLogging);
-        }
-
-        console.log(msg);
+        console.log(msgForOutput);
     }
 
     //Create a new named timer if a timer with the same name does not already exist.
